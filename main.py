@@ -124,11 +124,8 @@ class Discriminator(nn.Module):
         self.latent_layer = nn.Sequential(nn.Linear(128*ds_size**3, opt.code_dim))
 
     def forward(self, img):
-        print("1:",img.shape)
         out = self.conv_blocks(img)
-        print("2:",out.shape)
         out = out.view(out.shape[0], -1)
-        print("3:",out.shape)
         validity = self.adv_layer(out)
         label = self.aux_layer(out)
         latent_code = self.latent_layer(out)
@@ -194,7 +191,7 @@ num_load = 2
 # ----------
 
 for epoch in range( 1, opt.n_epochs+1 ):
-    if epoch%(opt.n_epochs//num_load)==0 or epoch==1:
+    if epoch ==1 or epoch==(opt.n_epochs//num_load):
         #load the data.
         logger.info('Start loading data:')
         logger.info(opt.datafile)

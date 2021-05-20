@@ -45,12 +45,55 @@ def get_parser():
                         help='number of checked data')
     return parser
 
+class Generator(nn.Module):
+    def __init__(self):
+        super(Generator, self).__init__()
+        input_dim = opt.latent_dim + opt.n_classes + opt.code_dim
+
+        self.l1 = nn.Sequential(
+                    nn.Linear(input_dim, 2048),
+                    nn.BatchNorm1d(2048),
+                    nn.LeakyReLU(0.2, inplace=True),
+                    nn.Linear(2048, 2*2*2*128),
+                    nn.BatchNorm1d(2*2*2*128),
+                    nn.LeakyReLU(0.2, inplace=True)
+                    )
+        self.conv_blocks = nn.Sequential(
+                    nn.ConvTranspose3d(128,64,3,1,0),
+                    nn.BatchNorm3d(64),
+                    nn.LeakyReLU(0.2, inplace=True),
+                    nn.ConvTranspose3d(64,32,5,3,0),
+                    nn.BatchNorm3d(32),
+                    nn.LeakyReLU(0.2, inplace=True),
+                    nn.ConvTranspose3d(32,16,5,3,0),
+                    nn.BatchNorm3d(16),
+                    nn.LeakyReLU(0.2, inplace=True),
+                    nn.ConvTranspose3d(16,1,6,2,0),
+                    nn.Tanh()
+                    )
+
+    def forward(self, noise, labels, code):
+        gen_input = torch.cat((noise, labels, code), -1)
+        out = self.l1(gen_input)
+        out = out.view(out.shape[0], 128,2,2,2)
+        hist = self.conv_blocks(out)
+        return hist
+
+def to_categorical(y, num_columns):
+    """Returns one-hot encoded Variable"""
+    y_cat = np.zeros((y.shape[0], num_columns))
+    y_cat[range(y.shape[0]), y] = 1.
+
+    return Variable(FloatTensor(y_cat))
 
 def check_fake_data(model, device, num_check, datafile):
     model.eval()
     F_Sum,F_x_Mean,F_z_Mean,F_t_Mean,F_x_Std,F_z_Std,F_t_Std = list(),list(),list(),list(),list(),list(),list()
     for i in range(num_check):
-        data = HistoDataset(datafile,1).load_data()
+        z = Variable(FloatTensor(np.random.normal(0, 1, (1, latent_dim))))
+        label_input = to_categorical(np.random.randint(0, n_classes, 1), num_columns=n_classes) # --------------
+        code_input = Variable(FloatTensor(np.random.uniform(-1, 1, (1, code_dim))))
+        data = model(z, label_input, code_input)
         with torch.no_grad():
             tmp,_,_ = model(data.to(device))
             tmp = tmp.detach().cpu().numpy()
@@ -180,6 +223,9 @@ if __name__=='__main__':
         num_check = parse_args.num_check
         model_restore_pt_path = parse_args.model_restore_pt_path
         outfile = parse_args.outfile
+        latent_dim = parse_args.latent_dim
+        n_classes = parse_args.n_classes
+        code_dim = parse_args.code_dim
 
         # --- set up all the logging stuff
         formatter = logging.Formatter(
@@ -196,9 +242,10 @@ if __name__=='__main__':
 
         kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
 
-        model = CVAE().to(device)
+        G = Generator()
+        model = G.to(device)
         model.load_state_dict(torch.load(model_restore_pt_path))
-        logger.info('Start checking...  VAE model load state:')
+        logger.info('Start checking...  Generator model load state:')
         logger.info(model_restore_pt_path)
 
         d_l_hist, g_l_hist, d_a1_hist, d_a2_hist, g_a_hist = list(), list(), list(), list(), list()
