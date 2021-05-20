@@ -1,0 +1,32 @@
+CUDA_VISIBLE_DEVICES 0
+gpu026.ihep.ac.cn
+Filesystem                Size  Used Avail Use% Mounted on
+devtmpfs                  189G     0  189G   0% /dev
+tmpfs                     189G  241M  189G   1% /dev/shm
+tmpfs                     189G  4.1G  185G   3% /run
+tmpfs                     189G     0  189G   0% /sys/fs/cgroup
+/dev/nvme0n1p3             88G   27G   62G  31% /
+/dev/nvme0n1p4             30G   47M   30G   1% /usr/vice/cache
+/dev/nvme0n1p5            776G   26G  750G   4% /tmp
+/dev/nvme0n1p2           1014M  169M  846M  17% /boot
+/dev/nvme0n1p1            200M   12M  189M   6% /boot/efi
+192.168.50.33@tcp:/hpcfs  1.8P  929T  790T  55% /hpcfs
+eospublic                 2.2P  1.9P  316T  86% /eos/public
+eoshxmt                   734T  494T  240T  68% /mnt/hxmt
+AFS                       2.0T     0  2.0T   0% /afs
+cvmfs2                     40G   25G   16G  61% /cvmfs/cvmfs-config.cern.ch
+cvmfs2                     40G   25G   16G  61% /cvmfs/common.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/bes3.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/juno.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/atlas.cern.ch
+cvmfs2                     40G   25G   16G  61% /cvmfs/cms.cern.ch
+cvmfs2                     40G   25G   16G  61% /cvmfs/cepc.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/lhaaso.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/sft.cern.ch
+cvmfs2                     40G   25G   16G  61% /cvmfs/lqcd.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/container.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/mlgpu.ihep.ac.cn
+cvmfs2                     40G   25G   16G  61% /cvmfs/sft-nightlies.cern.ch
+/hpcfs/bes/mlgpu/liaoyp/miniconda3/bin/python
+Namespace(D_pkl_path='/hpcfs/bes/mlgpu/liaoyp/jupyter/CGEM/Model/pkl_path/D_test.pkl', D_restore_pkl_path='/hpcfs/bes/mlgpu/liaoyp/jupyter/CGEM/2021code/infoGAN/Model/pkl_path/D_test.pkl', G_pkl_path='/hpcfs/bes/mlgpu/liaoyp/jupyter/CGEM/Model/pkl_path/G_test.pkl', G_restore_pkl_path='/hpcfs/bes/mlgpu/liaoyp/jupyter/CGEM/Model/pkl_path/G_test.pkl', b1=0.5, b2=0.999, batch_size=25, channels=1, code_dim=2, datafile='/hpcfs/bes/mlgpu/liaoyp/jupyter/CGEM/datasets/xzt_3D_92_10000.root', img_size=92, latent_dim=62, lr=0.0002, n_classes=10, n_epochs=10, num_hist=25, restore=False)
+2021-05-20 21:46:16,719 - None.main[INFO]: constructing graph
